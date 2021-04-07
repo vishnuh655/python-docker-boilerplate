@@ -1,17 +1,8 @@
-# set base image (host OS)
-FROM python:3-slim-buster
-
-# set the working directory in the container
-WORKDIR /code
-
-# copy the dependencies file to the working directory
-COPY requirements.txt .
-
-# install dependencies
+FROM python:3.7-alpine
+WORKDIR /code/app
+RUN apk add --no-cache gcc musl-dev linux-headers
+COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-
-# copy the content of the local src directory to the working directory
-COPY src/ .
-
-# command to run on container start
-CMD [ "python", "./server.py" ]
+EXPOSE 5000
+COPY . .
+CMD ["flask", "run"]
